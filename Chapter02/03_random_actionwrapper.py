@@ -23,6 +23,7 @@ if __name__ == "__main__":
 
     while True:
         obs, reward, done, _ = env.step(0)
+        # env.render()
         total_reward += reward
         if done:
             break
