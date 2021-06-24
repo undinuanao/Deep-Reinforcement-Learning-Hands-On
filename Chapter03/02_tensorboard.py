@@ -12,5 +12,5 @@ if __name__ == "__main__":
         for name, fun in funcs.items():
             val = fun(angle_rad)
             writer.add_scalar(name, val, angle)
-
+            
     writer.close()
