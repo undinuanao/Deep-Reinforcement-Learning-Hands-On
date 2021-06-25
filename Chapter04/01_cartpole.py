@@ -39,9 +39,15 @@ def iterate_batches(env, net, batch_size):
     sm = nn.Softmax(dim=1)
     while True:
         obs_v = torch.FloatTensor([obs])
+        print("obs_v:", obs_v)
+        act_prob_test = net(obs_v)
+        print("未经过Softmax处理过的网络输出：",act_prob_test)
         act_probs_v = sm(net(obs_v))
+        print("Softmax处理后的网络输出:", act_probs_v)
         act_probs = act_probs_v.data.numpy()[0]
+        print("act_probs:", act_probs)
         action = np.random.choice(len(act_probs), p=act_probs)
+        print("ACTION = ", action)
         next_obs, reward, is_done, _ = env.step(action)
         episode_reward += reward
         episode_steps.append(EpisodeStep(observation=obs, action=action))
@@ -91,9 +97,10 @@ if __name__ == "__main__":
         action_scores_v = net(obs_v)
         loss_v = objective(action_scores_v, acts_v)
         loss_v.backward()
+        # env.render()
         optimizer.step()
-        print("%d: loss=%.3f, reward_mean=%.1f, reward_bound=%.1f" % (
-            iter_no, loss_v.item(), reward_m, reward_b))
+        # print("%d: loss=%.3f, reward_mean=%.1f, reward_bound=%.1f" % (
+            # iter_no, loss_v.item(), reward_m, reward_b))
         writer.add_scalar("loss", loss_v.item(), iter_no)
         writer.add_scalar("reward_bound", reward_b, iter_no)
         writer.add_scalar("reward_mean", reward_m, iter_no)
