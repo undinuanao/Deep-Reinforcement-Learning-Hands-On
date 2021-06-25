@@ -39,15 +39,15 @@ def iterate_batches(env, net, batch_size):
     sm = nn.Softmax(dim=1)
     while True:
         obs_v = torch.FloatTensor([obs])
-        print("obs_v:", obs_v)
+        # print("obs_v:", obs_v)
         act_prob_test = net(obs_v)
-        print("未经过Softmax处理过的网络输出：",act_prob_test)
+        # print("未经过Softmax处理过的网络输出：",act_prob_test)
         act_probs_v = sm(net(obs_v))
-        print("Softmax处理后的网络输出:", act_probs_v)
+        # print("Softmax处理后的网络输出:", act_probs_v)
         act_probs = act_probs_v.data.numpy()[0]
-        print("act_probs:", act_probs)
+        # print("act_probs:", act_probs)
         action = np.random.choice(len(act_probs), p=act_probs)
-        print("ACTION = ", action)
+        # print("ACTION = ", action)
         next_obs, reward, is_done, _ = env.step(action)
         episode_reward += reward
         episode_steps.append(EpisodeStep(observation=obs, action=action))
@@ -64,8 +64,11 @@ def iterate_batches(env, net, batch_size):
 
 def filter_batch(batch, percentile):
     rewards = list(map(lambda s: s.reward, batch))
+    print("所有的奖励为：", rewards)
     reward_bound = np.percentile(rewards, percentile)
+    print("奖励边界为：", reward_bound)
     reward_mean = float(np.mean(rewards))
+    print("奖励均值为：", reward_mean)
 
     train_obs = []
     train_act = []
