@@ -1,18 +1,34 @@
-import sys
+#!/usr/bin/env python3
+import gym, gym.spaces
+from collections import namedtuple
+import numpy as np
+from tensorboardX import SummaryWriter
 
-def fibonacci(n,w=0): # 生成器函数 - 斐波那契
-    a, b, counter = 0, 1, 0
-    while True:
-        if (counter > n): 
-            return
-        yield a
-        a, b = b, a + b
-        # print('%d,%d' % (a,b))
-        counter += 1
-f = fibonacci(10,0) # f 是一个迭代器，由生成器返回生成
+import torch
+import torch.nn as nn
+import torch.optim as optim
 
-while True:
-    try:
-        print (next(f), end=" ")
-    except :
-        sys.exit()
+
+HIDDEN_SIZE = 128
+BATCH_SIZE = 16
+PERCENTILE = 70
+
+
+class DiscreteOneHotWrapper(gym.ObservationWrapper):
+    def __init__(self, env):
+        super(DiscreteOneHotWrapper, self).__init__(env)
+        assert isinstance(env.observation_space, gym.spaces.Discrete)
+        self.observation_space = gym.spaces.Box(0.0, 1.0, (env.observation_space.n, ), dtype=np.float32)
+
+    def observation(self, observation):
+        res = np.copy(self.observation_space.low)
+        res[observation] = 1.0
+        return res
+
+if __name__ == "__main__":
+    e1 = gym.make("FrozenLake-v0")
+    env = DiscreteOneHotWrapper(gym.make("FrozenLake-v0"))
+    print("e1.actionspace_space 等于 {0}, 实例为：{1}".format(e1.action_space, e1.action_space.sample()))
+    print("env.actionspace_space 等于 {0}, 实例为：{1}".format(env.action_space, env.action_space.sample()))
+    print("e1.actionspace_space 等于 {0}, 实例为：{1}".format(e1.action_space, e1.action_space.sample()))
+    print("e1.actionspace_space 等于 {0}, 实例为：{1}".format(e1.action_space, e1.action_space.sample()))
