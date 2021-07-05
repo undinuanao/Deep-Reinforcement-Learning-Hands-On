@@ -28,7 +28,8 @@ class DiscreteOneHotWrapper(gym.ObservationWrapper):
 if __name__ == "__main__":
     e1 = gym.make("FrozenLake-v0")
     env = DiscreteOneHotWrapper(gym.make("FrozenLake-v0"))
-    print("e1.actionspace_space 等于 {0}, 实例为：{1}".format(e1.action_space, e1.action_space.sample()))
-    print("env.actionspace_space 等于 {0}, 实例为：{1}".format(env.action_space, env.action_space.sample()))
-    print("e1.actionspace_space 等于 {0}, 实例为：{1}".format(e1.action_space, e1.action_space.sample()))
-    print("e1.actionspace_space 等于 {0}, 实例为：{1}".format(e1.action_space, e1.action_space.sample()))
+    print("e1.action_space 等于 {0}, 实例为：{1}".format(e1.action_space, e1.action_space.sample()))
+    print("env.action_space 等于 {0}, 实例为：{1}".format(env.action_space, env.action_space.sample()))
+    print("e1.observation_space 等于 {0}, 实例为：{1}".format(e1.observation_space, e1.observation_space.sample()))
+    print("env.observation_space 等于 {0}, 实例为：{1}".format(env.observation_space, env.observation_space.sample()))
+
