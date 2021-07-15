@@ -11,7 +11,7 @@ TEST_EPISODES = 20
 class Agent:
     def __init__(self):
         self.env = gym.make(ENV_NAME)
-        self.state = self.env.reset()
+        self.state = self.env.reset()       #获取第一个观察
         self.rewards = collections.defaultdict(float)
         self.transits = collections.defaultdict(collections.Counter)
         self.values = collections.defaultdict(float)
@@ -28,9 +28,9 @@ class Agent:
         target_counts = self.transits[(state, action)]
         total = sum(target_counts.values())
         action_value = 0.0
-        for tgt_state, count in target_counts.items():
-            reward = self.rewards[(state, action, tgt_state)]
-            action_value += (count / total) * (reward + GAMMA * self.values[tgt_state])
+        for target_state, count in target_counts.items():
+            reward = self.rewards[(state, action, target_state)]
+            action_value += (count / total) * (reward + GAMMA * self.values[target_state])
         return action_value
 
     def select_action(self, state):
@@ -62,6 +62,25 @@ class Agent:
                             for action in range(self.env.action_space.n)]
             self.values[state] = max(state_values)
 
+    def show_tables(self, table_length):
+        reward_ite = iter(self.rewards.items())
+        trans_ite = iter(self.transits.items())
+        value_ite = iter(self.values.items())
+        display_length = table_length
+        for i in range(display_length):
+            _, __ = next(reward_ite)
+            print("Reward:key = {0}, value = {1}".format(_, __))
+        for i in range(display_length):
+            _, __ = next(trans_ite)
+            print("Transition:key = {0}, value = {1}".format(_, __))
+        for i in range(display_length):
+            try:
+                _, __ = next(value_ite)
+                print("Value:key = {0}, value = {1}".format(_, __))
+            except:
+                print(self.values)
+                break
+    
 
 if __name__ == "__main__":
     test_env = gym.make(ENV_NAME)
