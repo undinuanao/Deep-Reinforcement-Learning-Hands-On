@@ -78,7 +78,7 @@ class Agent:
                 _, __ = next(value_ite)
                 print("Value:key = {0}, value = {1}".format(_, __))
             except:
-                print(self.values)
+                # print(self.values)
                 break
     
 
@@ -105,4 +105,5 @@ if __name__ == "__main__":
         if reward > 0.80:
             print("Solved in %d iterations!" % iter_no)
             break
+    agent.show_tables(20)
     writer.close()
